@@ -18,7 +18,7 @@ namespace BatmanGame
         public void Run()
         {
             Game();
-        }                           // Run Method End
+        }
         private void Game()
         {
             _batman.Health = 100;
@@ -463,41 +463,41 @@ namespace BatmanGame
                 case 0:
                     Console.WriteLine("A Goon is attacking Batman!");
                     _villain.Name = "Random Goon";
-                    _villain.Health = 15;
+                    _villain.Health = 20;
                     break;
                 case 1:
                     Console.WriteLine("Poison Ivy is trying to seduce Batman. Stop Her!");
                     _villain.Name = "Poison Ivy";
-                    _villain.Health = 20;
+                    _villain.Health = 25;
                     break;
                 case 2:
                     Console.WriteLine("The Peguin waddles his way towards Batman with his umbrella gun.");
                     _villain.Name = "The Penguin";
-                    _villain.Health = 30;
+                    _villain.Health = 45;
                     break;
                 case 3:
                     _villain.Name = "The Riddler";
-                    _villain.Health = 18;
+                    _villain.Health = 30;
                     break;
                 case 4:
                     Console.WriteLine("The Scarecrow sneaks behind Batman and unleashes his fear toxin. Everything is starting to be distorted. ");
                     _villain.Name = "Scarecrow";
-                    _villain.Health = 18;
+                    _villain.Health = 30;
                     break;
                 case 5:
                     Console.WriteLine("Two-Face approaches with his own coin. 'Heads or Tails!'");
                     _villain.Name = "Two-Face";
-                    _villain.Health = 25;
+                    _villain.Health = 35;
                     break;
                 case 6:
                     Console.WriteLine("Bane injects himself with venom. He is now 2 times his size!");
                     _villain.Name = "Bane";
-                    _villain.Health = 30;
+                    _villain.Health = 45;
                     break;
                 case 7:
                     Console.WriteLine("Batman finally reach the Joker! He cackles as he's ready to fight");
                     _villain.Name = "The Joker";
-                    _villain.Health = 25;
+                    _villain.Health = 35;
                     break;
                 default:
                     break;
