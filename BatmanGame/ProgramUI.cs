@@ -65,13 +65,13 @@ namespace BatmanGame
                         TurnStartInfo();
                         _invalidAttack = true;
                         Console.Clear();
-                        while (_batman.DiceOne != 0 && _batman.DiceTwo != 0)
+                        while (_batman.DiceOne != 0 || _batman.DiceTwo != 0)
                         {
 
                             while (_invalidAttack)
                             {
                                 ChooseAttackDisplay();
-                                Console.Write("Do you want to use dice (1) or dice (2)? ");
+                                Console.Write("Please enter the (#) of the Die you want to use: ");
                                 string chooseDie = Console.ReadLine();
 
                                 if (chooseDie == "1")
@@ -100,10 +100,11 @@ namespace BatmanGame
                                 }
                             } // Loop to ensure valid attack
 
+                            _invalidAttack = true;
                             _villain.Health -= _batDamage;
-                            Thread.Sleep(1200);
+                            Thread.Sleep(1000);
                             Console.WriteLine($"That attack did {_batDamage} damage to {_villain.Name}!");
-                            Thread.Sleep(2400);
+                            Thread.Sleep(2000);
                             Console.WriteLine($"They have {_villain.Health} health remaining");
                             AnyKey();
                             Console.Clear();
