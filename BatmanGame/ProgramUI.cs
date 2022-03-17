@@ -13,154 +13,155 @@ namespace BatmanGame
         private Villain _villain = new Villain();
         private Batman _batman = new Batman();
         private int _attackDie = 0;
-        private bool _finishGame = false;
         private bool _invalidAttack = true;
         private int _batDamage = 0;
         public void Run()
         {
-            while (!_finishGame)
+            Game();
+        }                           // Run Method End
+        private void Game()
+        {
+            _batman.Health = 100;
+            _villainNumber = 0;
+            Console.Clear();
+            Console.WriteLine("Batman has been captured and is now trapped in Arkham Asylum by the Joker!!\n" +
+                "He will need to fight his way through some of Gotham's toughest villains\n" +
+                "in order to stop the Joker's master plan!\n" +
+                "\n" +
+                "Unfortunately the villains took most of his gadgets, but not all of them!\n" +
+                "Batman managed to keep his fists, his lucky Bat-Dice, and 3 other Bat-Gadgets\n" +
+                "Pick which 3 gadgets you need:\n" +
+                "1. Stun Gun (Low damage but can stun an enemy with a roll of 6)\n" +
+                "2. Bat-Bat (Uses only an even number to do moderate damage) \n" +
+                "3. Batarang (If you roll a 1, you'll be happy you brought the Batarang)\n" +
+                "4. Bat Shark Repellent (We don't know how this got in here but you can take it if you want)\n" +
+                "5. Bat-LightSaber (High damage gadget that will only use a 6)\n" +
+                "6. Bat-Gauntlet (Similar to the Bat-Bat, but using odd numbers and a less funny name)");
+
+            string gadgetTwo = Console.ReadLine();
+            _batman.GadgetTwo = GameStartPick(gadgetTwo);
+            string gadgetThree = Console.ReadLine();
+            _batman.GadgetThree = GameStartPick(gadgetThree);
+            string gadgetFour = Console.ReadLine();
+            _batman.GadgetFour = GameStartPick(gadgetFour);
+            Console.Clear();
+            Console.WriteLine("Those will probably come in handy...maybe...");
+            Thread.Sleep(2200);
+            //Encounter loop
+            while (_batman.Health > 0)
             {
-                _batman.Health = 100;
-                _villainNumber = 0;
-                Console.WriteLine("Batman has been captured and is now trapped in Arkham Asylum by the Joker!!\n" +
-                    "He will need to fight his way through some of Gotham's toughest villains\n" +
-                    "in order to stop the Joker's master plan!\n" +
-                    "\n" +
-                    "Unfortunately the villains took most of his gadgets, but not all of them!\n" +
-                    "Batman managed to keep his fists, his lucky Bat-Dice, and 3 other Bat-Gadgets\n" +
-                    "Pick which 3 gadgets you need:\n" +
-                    "1. Stun Gun (Low damage but can stun an enemy with a roll of 6)\n" +
-                    "2. Bat-Bat (Uses only an even number to do moderate damage) \n" +
-                    "3. Batarang (If you roll a 1, you'll be happy you brought the Batarang)\n" +
-                    "4. Bat Shark Repellent (We don't know how this got in here but you can take it if you want)\n" +
-                    "5. Bat-LightSaber (High damage gadget that will only use a 6)\n" +
-                    "6. Bat-Gauntlet (Similar to the Bat-Bat, but using odd numbers and a less funny name)");
-
-                string gadgetTwo = Console.ReadLine();
-                _batman.GadgetTwo = GameStartPick(gadgetTwo);
-                string gadgetThree = Console.ReadLine();
-                _batman.GadgetThree = GameStartPick(gadgetThree);
-                string gadgetFour = Console.ReadLine();
-                _batman.GadgetFour = GameStartPick(gadgetFour);
-                Console.Clear();
-                Console.WriteLine("Those will probably come in handy...maybe...");
-                Thread.Sleep(2200);
-                //Encounter loop
-                while (_batman.Health > 0)
+                NewVilian();
+                AnyKey();
+                //Fight loop
+                if (_villain.Name == "The Riddler")
                 {
-                    NewVilian();
-                    AnyKey();
-                    //Fight loop
-                    if (_villain.Name == "The Riddler")
+                    RiddlerFight();
+                }
+                else
+                {
+                    Console.Clear();
+                    while (_villain.Health > 0 && _batman.Health > 0)
                     {
-                        RiddlerFight();
-                    }
-                    else
-                    {
+                        TurnStartInfo();
+                        _invalidAttack = true;
                         Console.Clear();
-                        while (_villain.Health > 0 && _batman.Health > 0)
+                        while (_batman.DiceOne != 0 && _batman.DiceTwo != 0)
                         {
-                            TurnStartInfo();
-                            _invalidAttack = true;
-                            Console.Clear();
-                            while (_batman.DiceOne != 0 || _batman.DiceTwo != 0)
+
+                            while (_invalidAttack)
                             {
+                                ChooseAttackDisplay();
+                                Console.Write("Do you want to use dice (1) or dice (2)? ");
+                                string chooseDie = Console.ReadLine();
 
-                                while (_invalidAttack)
+                                if (chooseDie == "1")
                                 {
-                                    ChooseAttackDisplay();
-                                    Console.Write("Do you want to use (1) or (2)? ");
-                                    string chooseDie = Console.ReadLine();
-
-                                    if (chooseDie == "1")
-                                    {
-                                        _attackDie = _batman.DiceOne;
-                                        _batman.DiceOne = 0;
-                                    }
-                                    else if (chooseDie == "2")
-                                    {
-                                        _attackDie = _batman.DiceTwo;
-                                        _batman.DiceTwo = 0;
-                                    }
-                                    Console.Write("Please enter the number of the gadget you want to use: ");
-                                    string chooseGadget = Console.ReadLine();
-                                    Console.Clear();
-                                    Batman.Gadget attackGadget = PickGadget(chooseGadget);
-                                    _batDamage = AttackMethod(attackGadget);
-                                    if (_batDamage != 0)
-                                    {
-                                        _invalidAttack = false;
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("Please enter a valid attack");
-                                        AnyKey();
-                                    }
-                                } // Loop to ensure valid attack
-
-                                _villain.Health -= _batDamage;
-                                Thread.Sleep(1200);
-                                Console.WriteLine($"That attack did {_batDamage} damage to {_villain.Name}!");
-                                Thread.Sleep(2400);
-                                Console.WriteLine($"They have {_villain.Health} health remaining");
-                                AnyKey();
-                                Console.Clear();
-                                if (_villain.Health < 1)
-                                {
-                                    _batman.DiceTwo = 0;
+                                    _attackDie = _batman.DiceOne;
                                     _batman.DiceOne = 0;
                                 }
-                            }
-                            //Check to see if villain is defeated
-                            if (_villain.Health < 1)
-                            {
-                                Console.WriteLine($"{_villain.Name} has been defeated!\n" +
-                                    $"Batman still has {_batman.Health} health left.");
-                                //Defeat Message
-                                //Recap Message
-                            }
-                            else
-                            {
-                                //Villain Rolls
-                                if (!_batman.VillainStunned)
+                                else if (chooseDie == "2")
                                 {
-
-                                    _attackDie = DiceRoll();
-                                    int villainAttack = VillainAttackMethod();
-                                    _batman.Health -= villainAttack;
-                                    Thread.Sleep(2500);
-                                    Console.WriteLine($"They do {villainAttack} damage to Batman");
-                                    Thread.Sleep(1500);
-                                    Console.WriteLine($"Batman has {_batman.Health} health remaining");
-                                    if (_batman.Health < 1)
-                                    {
-                                        GameOver();
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("And the fight continues...");
-                                        AnyKey();
-                                        Console.Clear();
-                                    }
+                                    _attackDie = _batman.DiceTwo;
+                                    _batman.DiceTwo = 0;
+                                }
+                                Console.Write("Please enter the number of the gadget you want to use: ");
+                                string chooseGadget = Console.ReadLine();
+                                Console.Clear();
+                                Batman.Gadget attackGadget = PickGadget(chooseGadget);
+                                _batDamage = AttackMethod(attackGadget);
+                                if (_batDamage != 0)
+                                {
+                                    _invalidAttack = false;
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"{_villain.Name} is stunned and cannot attack!");
-                                    _batman.UnStun();
+                                    Console.WriteLine("Please enter a valid attack");
+                                    AnyKey();
+                                }
+                            } // Loop to ensure valid attack
+
+                            _villain.Health -= _batDamage;
+                            Thread.Sleep(1200);
+                            Console.WriteLine($"That attack did {_batDamage} damage to {_villain.Name}!");
+                            Thread.Sleep(2400);
+                            Console.WriteLine($"They have {_villain.Health} health remaining");
+                            AnyKey();
+                            Console.Clear();
+                            if (_villain.Health < 1)
+                            {
+                                _batman.DiceTwo = 0;
+                                _batman.DiceOne = 0;
+                            }
+                        }
+                        //Check to see if villain is defeated
+                        if (_villain.Health < 1)
+                        {
+                            Console.WriteLine($"{_villain.Name} has been defeated!\n" +
+                                $"Batman still has {_batman.Health} health left.");
+                            //Defeat Message
+                            //Recap Message
+                        }
+                        else
+                        {
+                            //Villain Rolls
+                            if (!_batman.VillainStunned)
+                            {
+
+                                _attackDie = DiceRoll();
+                                int villainAttack = VillainAttackMethod();
+                                _batman.Health -= villainAttack;
+                                Thread.Sleep(2500);
+                                Console.WriteLine($"They do {villainAttack} damage to Batman");
+                                Thread.Sleep(1500);
+                                Console.WriteLine($"Batman has {_batman.Health} health remaining");
+                                if (_batman.Health < 1)
+                                {
+                                    GameOver();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("And the fight continues...");
                                     AnyKey();
                                     Console.Clear();
                                 }
-                            }       // Villain Attack
-                        }           // Fight Loop
-                    }               // If--Else for Riddler fight
-                    _villainNumber++;
-                    if (_villainNumber == 8)
-                    {
-                        YouWin();
-                    }
-                }                   // Encounter Loop
-            }                       // While Loop for play again or quit
-        }                           // Run Method End
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{_villain.Name} is stunned and cannot attack!");
+                                _batman.UnStun();
+                                AnyKey();
+                                Console.Clear();
+                            }
+                        }       // Villain Attack
+                    }           // Fight Loop
+                }               // If--Else for Riddler fight
+                _villainNumber++;
+                if (_villainNumber == 8)
+                {
+                    YouWin();
+                }
+            }                   // Encounter Loop
+        }
 
         //**********************************************HELPER METHODS*******************************************
         private int DiceRoll()
@@ -174,51 +175,51 @@ namespace BatmanGame
             {
                 case 1:
                     Console.WriteLine("   (1)   ");
-                    Console.WriteLine("┌------─┐");
+                    Console.WriteLine("┌———————┐");
                     Console.WriteLine("│       │");
                     Console.WriteLine("│   o   │");
                     Console.WriteLine("│       │");
-                    Console.WriteLine("└─------┘");
+                    Console.WriteLine("└———————┘");
                     break;
                 case 2:
                     Console.WriteLine("   (1)   ");
-                    Console.WriteLine("┌------─┐");
+                    Console.WriteLine("┌———————┐");
                     Console.WriteLine("│ o     │");
                     Console.WriteLine("│       │");
                     Console.WriteLine("│     o │");
-                    Console.WriteLine("└─------┘");
+                    Console.WriteLine("└———————┘");
                     break;
                 case 3:
                     Console.WriteLine("   (1)   ");
-                    Console.WriteLine("┌------─┐");
+                    Console.WriteLine("┌———————┐");
                     Console.WriteLine("│ o     │");
                     Console.WriteLine("│   o   │");
                     Console.WriteLine("│     o │");
-                    Console.WriteLine("└─------┘");
+                    Console.WriteLine("└———————┘");
                     break;
                 case 4:
                     Console.WriteLine("   (1)   ");
-                    Console.WriteLine("┌------─┐");
+                    Console.WriteLine("┌———————┐");
                     Console.WriteLine("│ o   o │");
                     Console.WriteLine("│       │");
                     Console.WriteLine("│ o   o │");
-                    Console.WriteLine("└─------┘");
+                    Console.WriteLine("└———————┘");
                     break;
                 case 5:
                     Console.WriteLine("   (1)   ");
-                    Console.WriteLine("┌------─┐");
+                    Console.WriteLine("┌———————┐");
                     Console.WriteLine("│ o   o │");
                     Console.WriteLine("│   o   │");
                     Console.WriteLine("│ o   o │");
-                    Console.WriteLine("└─------┘");
+                    Console.WriteLine("└———————┘");
                     break;
                 case 6:
                     Console.WriteLine("   (1)   ");
-                    Console.WriteLine("┌------─┐");
+                    Console.WriteLine("┌———————┐");
                     Console.WriteLine("│ o   o │");
                     Console.WriteLine("│ o   o │");
                     Console.WriteLine("│ o   o │");
-                    Console.WriteLine("└─------┘");
+                    Console.WriteLine("└———————┘");
                     break;
                 default:
                     break;
@@ -227,51 +228,51 @@ namespace BatmanGame
             {
                 case 1:
                     Console.WriteLine("   (2)   ");
-                    Console.WriteLine("┌------─┐");
+                    Console.WriteLine("┌———————┐");
                     Console.WriteLine("│       │");
                     Console.WriteLine("│   o   │");
                     Console.WriteLine("│       │");
-                    Console.WriteLine("└─------┘");
+                    Console.WriteLine("└———————┘");
                     break;
                 case 2:
                     Console.WriteLine("   (2)   ");
-                    Console.WriteLine("┌------─┐");
+                    Console.WriteLine("┌———————┐");
                     Console.WriteLine("│ o     │");
                     Console.WriteLine("│       │");
                     Console.WriteLine("│     o │");
-                    Console.WriteLine("└─------┘");
+                    Console.WriteLine("└———————┘");
                     break;
                 case 3:
                     Console.WriteLine("   (2)   ");
-                    Console.WriteLine("┌------─┐");
+                    Console.WriteLine("┌———————┐");
                     Console.WriteLine("│ o     │");
                     Console.WriteLine("│   o   │");
                     Console.WriteLine("│     o │");
-                    Console.WriteLine("└─------┘");
+                    Console.WriteLine("└———————┘");
                     break;
                 case 4:
                     Console.WriteLine("   (2)   ");
-                    Console.WriteLine("┌------─┐");
+                    Console.WriteLine("┌———————┐");
                     Console.WriteLine("│ o   o │");
                     Console.WriteLine("│       │");
                     Console.WriteLine("│ o   o │");
-                    Console.WriteLine("└─------┘");
+                    Console.WriteLine("└———————┘");
                     break;
                 case 5:
                     Console.WriteLine("   (2)   ");
-                    Console.WriteLine("┌------─┐");
+                    Console.WriteLine("┌———————┐");
                     Console.WriteLine("│ o   o │");
                     Console.WriteLine("│   o   │");
                     Console.WriteLine("│ o   o │");
-                    Console.WriteLine("└─------┘");
+                    Console.WriteLine("└———————┘");
                     break;
                 case 6:
                     Console.WriteLine("   (2)   ");
-                    Console.WriteLine("┌------─┐");
+                    Console.WriteLine("┌———————┐");
                     Console.WriteLine("│ o   o │");
                     Console.WriteLine("│ o   o │");
                     Console.WriteLine("│ o   o │");
-                    Console.WriteLine("└─------┘");
+                    Console.WriteLine("└———————┘");
                     break;
                 default:
                     break;
@@ -371,7 +372,7 @@ namespace BatmanGame
             {
                 return Batman.Gadget.DevTool;
             }
-            else if( gadget == "04729")
+            else if (gadget == "04729")
             {
                 _villainNumber = 7;
                 return Batman.Gadget.DevTool;
@@ -461,41 +462,41 @@ namespace BatmanGame
                 case 0:
                     Console.WriteLine("A Goon is attacking Batman!");
                     _villain.Name = "Random Goon";
-                    _villain.Health = 25;
+                    _villain.Health = 15;
                     break;
                 case 1:
                     Console.WriteLine("Poison Ivy is trying to seduce Batman. Stop Her!");
                     _villain.Name = "Poison Ivy";
-                    _villain.Health = 30;
+                    _villain.Health = 20;
                     break;
                 case 2:
                     Console.WriteLine("The Peguin waddles his way towards Batman with his umbrella gun.");
                     _villain.Name = "The Penguin";
-                    _villain.Health = 45;
+                    _villain.Health = 30;
                     break;
                 case 3:
                     _villain.Name = "The Riddler";
-                    _villain.Health = 30;
+                    _villain.Health = 18;
                     break;
                 case 4:
                     Console.WriteLine("The Scarecrow sneaks behind Batman and unleashes his fear toxin. Everything is starting to be distorted. ");
                     _villain.Name = "Scarecrow";
-                    _villain.Health = 30;
+                    _villain.Health = 18;
                     break;
                 case 5:
                     Console.WriteLine("Two-Face approaches with his own coin. 'Heads or Tails!'");
                     _villain.Name = "Two-Face";
-                    _villain.Health = 35;
+                    _villain.Health = 25;
                     break;
                 case 6:
                     Console.WriteLine("Bane injects himself with venom. He is now 2 times his size!");
                     _villain.Name = "Bane";
-                    _villain.Health = 40;
+                    _villain.Health = 30;
                     break;
                 case 7:
                     Console.WriteLine("Batman finally reach the Joker! He cackles as he's ready to fight");
                     _villain.Name = "The Joker";
-                    _villain.Health = 35;
+                    _villain.Health = 25;
                     break;
                 default:
                     break;
@@ -512,11 +513,11 @@ namespace BatmanGame
             Console.WriteLine("With the Joker and the other villains defeated and in police custody\n" +
                 "Gotham City stands safe once again!\n" +
                 "");
-            Thread.Sleep(6000);
+            Thread.Sleep(5000);
             Console.WriteLine("Now that he has nothing more to worry about, the Caped Crusader decides to\n" +
                 "get some well deserved rest and relaxation at the Gotham City beach.\n" +
                 "");
-            Thread.Sleep(6000);
+            Thread.Sleep(5000);
             Console.WriteLine("As Batman shreds waves with his radical Bat-Surfboard, he smiles as he\n" +
                 "enjoys not having anything else that can hurt him at the moment\n" +
                 "");
@@ -539,7 +540,7 @@ namespace BatmanGame
                 else
                 {
                     Console.WriteLine("Thank you for playing!");
-                    _finishGame = true;
+                    _batman.Health = 0;
                     AnyKey();
                 }
             }
@@ -620,7 +621,7 @@ namespace BatmanGame
             else
             {
                 Console.WriteLine("Thank you for playing!");
-                _finishGame = true;
+                _batman.Health = 0;
                 AnyKey();
             }
         }
