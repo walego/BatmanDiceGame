@@ -1,8 +1,0 @@
-C:\ElevenFiftyProjects\MainClass\Batman\BatmanGame\BatmanGame\obj\Debug\BatmanGame.csproj.AssemblyReference.cache
-C:\ElevenFiftyProjects\MainClass\Batman\BatmanGame\BatmanGame\obj\Debug\BatmanGame.csproj.SuggestedBindingRedirects.cache
-C:\ElevenFiftyProjects\MainClass\Batman\BatmanGame\BatmanGame\obj\Debug\BatmanGame.csproj.CoreCompileInputs.cache
-C:\ElevenFiftyProjects\MainClass\Batman\BatmanGame\BatmanGame\bin\Debug\BatmanGame.exe.config
-C:\ElevenFiftyProjects\MainClass\Batman\BatmanGame\BatmanGame\bin\Debug\BatmanGame.exe
-C:\ElevenFiftyProjects\MainClass\Batman\BatmanGame\BatmanGame\bin\Debug\BatmanGame.pdb
-C:\ElevenFiftyProjects\MainClass\Batman\BatmanGame\BatmanGame\obj\Debug\BatmanGame.exe
-C:\ElevenFiftyProjects\MainClass\Batman\BatmanGame\BatmanGame\obj\Debug\BatmanGame.pdb
